@@ -2,16 +2,20 @@
 
 ## Contents
 1. [Summary](#summary)
-2. [Architecture](#architecture)
-3. [Features](#features)
-4. [Prerequisites](#prerequisites)
-5. [Installation](#installation)
-6. [Usage](#usage)
-7. [Bash Kernel Notes](#bash-kernel)
+2. [Presentation](#presentation)
+3. [Architecture](#architecture)
+4. [Features](#features)
+5. [Prerequisites](#prerequisites)
+6. [Installation](#installation)
+7. [Usage](#usage)
+8. [Bash Kernel Notes](#bash-kernel)
 
 ## Summary <a name="summary"></a>
 This demo explores usage of the Elastic CLI both from human and agent standpoints.  The human is given admin-level access to commands while the agent is restricted to essentially read-only access.
 
+
+## Presentation <a name="presentation"></a>
+[Slide deck](https://joeywhelan.github.io/leashed-agent/)
 
 ## Architecture <a name="architecture"></a>
 ![architecture](assets/images/arch.png)
