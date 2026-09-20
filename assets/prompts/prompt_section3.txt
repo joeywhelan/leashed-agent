@@ -1,0 +1,19 @@
+# Section 3 — Explore by Hand
+
+A dark-themed technical diagram (900×300px, 3:1 ratio, delivered as PNG) illustrating that a person running plain CLI queries can see the catalog's defects without any tooling: three query results side by side, each with the anomalous value picked out. Dark charcoal background (#0D1117), flat vector rendering, no 3D effects, at least 5% clear margin on every edge. Colours: Elastic teal (#00BFB3) for Elastic components (the CLI, the index), light blue (#1BA9F5) for normal result values and flow arrows, orange (#F5A700) for the human's context label, desaturated slate grey for panel frames, yellow (#FEC514) only for the anomalous values. Labels in a clean monospaced face, grey unless noted.
+
+**Key components (left to right):**
+
+- **Far left: the human's context** — a small orange rounded rectangle labelled "--use-context admin", with a teal arrow to the right labelled "elastic es esql query" pointing at the three result panels together.
+- **Panel 1: the summary** — a grey-framed panel styled like a two-row terminal table. Header row in grey: "products", "min_price", "max_price". Value row: "5040" and "499.98" in light blue, "-447.0" in yellow.
+- **Panel 2: the count** — a grey-framed panel containing one line of text: "30 products have no price", with the number "30" in yellow and the rest in light blue.
+- **Panel 3: categories** — a grey-framed panel styled like a terminal table with header "docs" and "category". Six rows in light blue, top to bottom: "833 case", "816 mount", "816 cable", "813 sensor", "810 audio", "802 charger". Below them, separated by a thin grey rule, three rows in yellow: "18 CASE", "15 MOUNT", "15 Charger", and beneath those a yellow vertical ellipsis "⋮" to indicate more rows.
+- **Far right: the index** — a small teal cylinder labelled "products", with a thin teal line back to the panels showing where the answers came from.
+
+**Design principle:**
+The image communicates a single idea: "the defects are visible from the shell to anyone who looks; the yellow values are the ones that should not be there." Panel 3 must read as six good rows and then a tail of bad ones.
+
+**Text accuracy:**
+Every string must be copied character-for-character; the only permitted strings in the frame are: `--use-context admin`, `elastic es esql query`, `products`, `min_price`, `max_price`, `5040`, `-447.0`, `499.98`, `30 products have no price`, `docs`, `category`, `833 case`, `816 mount`, `816 cable`, `813 sensor`, `810 audio`, `802 charger`, `18 CASE`, `15 MOUNT`, `15 Charger`, `⋮`. Watch for doubled consonants ("Serrverless"-type errors) and proofread every label letter by letter before delivering; regenerate rather than deliver a misspelled frame.
+
+**Exclusions:** No legend, caption box, title, footnote, colour key, or any explanatory text block. No logos, brand marks, icons of real products, or watermarks. No depiction of a person or a hand. Only the nodes, arrows, panels, and labels listed above appear in the frame.

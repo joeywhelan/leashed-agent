@@ -1,0 +1,14 @@
+{
+  "index": "products",
+  "mappings": {
+    "properties": {
+      "sku":         { "type": "keyword" },
+      "name":        { "type": "text", "fields": { "keyword": { "type": "keyword" } } },
+      "category":    { "type": "keyword" },
+      "price":       { "type": "double" },
+      "in_stock":    { "type": "boolean" },
+      "description": { "type": "text" },
+      "updated_at":  { "type": "date" }
+    }
+  }
+}

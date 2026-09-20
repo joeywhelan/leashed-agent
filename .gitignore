@@ -1,0 +1,20 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Installed agent skills (reinstall via: npx skills add elastic/agent-skills)
+.agents/skills/
+
+# Demo outputs (runbook, agent transcripts)
+out/
+
+# Secrets and generated config
+.env
+

@@ -1,0 +1,29 @@
+# commands.allowed for the `agent` context. Attached in Section 4 with:
+#   yq -i '.contexts.agent.commands = load("assets/config/agent-policy.yml")' out/elasticrc.yml
+# A context's allowed list replaces the root list entirely. Reads and ES|QL only.
+allowed:
+  - version
+  - status
+  - docs.*
+  - sanitize.*
+  - config.context.list
+  - config.current-context.get
+  - stack.es.info
+  - stack.es.count
+  - stack.es.search
+  - stack.es.msearch
+  - stack.es.get
+  - stack.es.mget
+  - stack.es.field-caps
+  - stack.es.esql.*
+  - stack.es.indices.get
+  - stack.es.indices.exists
+  - stack.es.indices.get-mapping
+  - stack.es.indices.get-settings
+  - stack.es.indices.get-alias
+  - stack.es.indices.resolve-index
+  - stack.es.indices.stats
+  - stack.es.cat.indices
+  - stack.es.cat.count
+  - stack.es.helpers.scroll-search
+  - stack.es.helpers.msearch

@@ -1,0 +1,19 @@
+# Section 5 — Apply the Fixes
+
+A dark-themed technical diagram (900×300px, 3:1 ratio, delivered as PNG) illustrating the handoff at the end of the demo: the agent's report and transcript come in from the left, the human checks two receipts, runs two fixes under the admin context, and two defect counts fall to zero. Dark charcoal background (#0D1117), flat vector rendering, no 3D effects, at least 5% clear margin on every edge. Colours: Elastic teal (#00BFB3) for Elastic components (the CLI, the index), purple (#8C5BFF) for the agent's artefacts, orange (#F5A700) for the human's context, light blue (#1BA9F5) for flow arrows and the "before" counts, pink (#F04E98) only for the refusal receipt, yellow (#FEC514) only for the two zeros. Labels in a clean monospaced face, grey unless noted.
+
+**Key components (left to right):**
+
+- **Far left: the agent's artefacts** — two small purple document icons stacked vertically, labelled "out/report.md" (top) and "out/transcript.jsonl" (bottom), with a light-blue arrow from each toward the centre.
+- **Left-centre: two receipts** — two small grey-framed panels stacked vertically, fed by the transcript's arrow. The upper one contains one pink line: "command_blocked". The lower one contains three grey lines with light-blue zeros: "cloud api key: 0", "project password: 0", "agent api key: 0".
+- **Centre: the human's context** — an orange rounded rectangle labelled "--use-context admin", fed by the report's arrow. From it, two teal arrows leave to the right, stacked, labelled "update-by-query: category" (upper) and "update-by-query: name" (lower).
+- **Right-centre: before and after** — two small grey-framed panels, one per arrow, each showing a before value in light blue, a short grey right-pointing arrow, and an after value in yellow. Upper: "150 → 0". Lower: "60 → 0".
+- **Far right: the index** — a teal cylinder labelled "products", where both teal arrows end.
+
+**Design principle:**
+The image communicates a single idea: "the agent did the reading and the reasoning, the human checked the receipts and turned the keys, and the two mechanical defects are gone." The two zeros must be the only yellow in the frame, and the refusal receipt the only pink.
+
+**Text accuracy:**
+Every string must be copied character-for-character; the only permitted strings in the frame are: `out/report.md`, `out/transcript.jsonl`, `command_blocked`, `cloud api key: 0`, `project password: 0`, `agent api key: 0`, `--use-context admin`, `update-by-query: category`, `update-by-query: name`, `150 → 0`, `60 → 0`, `products`. Watch for doubled consonants ("Serrverless"-type errors) and proofread every label letter by letter before delivering; regenerate rather than deliver a misspelled frame.
+
+**Exclusions:** No legend, caption box, title, footnote, colour key, or any explanatory text block. No logos, brand marks, icons of real products, or watermarks. No depiction of a person or a hand. Only the nodes, panels, arrows, and labels listed above appear in the frame.

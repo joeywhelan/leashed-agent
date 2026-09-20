@@ -1,0 +1,24 @@
+# Section 4 — Leash the Agent
+
+A dark-themed technical diagram (900×300px, 3:1 ratio, delivered as PNG) illustrating that one write command is refused three times by three different parties: a single command on the left, three gates in a row, and each gate's refusal stamped beneath it. Dark charcoal background (#0D1117), flat vector rendering, no 3D effects, at least 5% clear margin on every edge. Colours: Elastic teal (#00BFB3) for Elastic components (the API key gate, the CLI gate, the index), purple (#8C5BFF) for the agent and the Claude Code gate, light blue (#1BA9F5) for the command's path, desaturated slate grey for the dimmed continuation of the path, pink (#F04E98) only for the three refusals. Labels in a clean monospaced face, grey unless noted.
+
+**Key components (left to right):**
+
+- **Far left: the agent** — a small purple rounded rectangle labelled "Claude Code", with a light-blue arrow leaving it to the right carrying the command as its label: "elastic es indices delete --index products".
+- **Gate 3 (first met)** — a tall purple vertical bar the arrow strikes, labelled above "Layer 3" and beneath that in smaller grey "Claude Code tool permission". Under the bar, a pink stamp: "denied".
+- **Gate 2** — a tall teal vertical bar, labelled above "Layer 2" and "CLI allowlist". Under the bar, a pink stamp: "command_blocked".
+- **Gate 1** — a tall teal vertical bar, labelled above "Layer 1" and "Elastic API key". Under the bar, a pink stamp: "403".
+- **The path between gates** — the light-blue arrow stops at gate 3. From gate 3 onward it continues as a slate-grey dashed line through gate 2 and gate 1, showing the route the command would have taken, with each later gate still standing across it.
+- **Far right: the index** — a teal cylinder labelled "products", untouched, at the end of the dashed line.
+
+**Design principle:**
+The image communicates a single idea: "the same delete would be refused three separate times before it reached the index; the agent only ever meets the first refusal, and the other two are waiting behind it." The three bars must be the same height and spacing so they read as a series, and the refusals must be the only pink in the frame.
+
+**Text accuracy:**
+Every string must be copied character-for-character; the only permitted strings in the frame are: `Claude Code`, `elastic es indices delete --index products`, `Layer 3`, `Claude Code tool permission`, `denied`, `Layer 2`, `CLI allowlist`, `command_blocked`, `Layer 1`, `Elastic API key`, `403`, `products`.
+
+The label under "Layer 1" is **Elastic API key**, two short words and then "key"; it is deliberately not the longer product name, which image generators misspell. Do not expand it. Treat `allowlist` with care: one word, one `l` after the `a`, not "allowlisst" or "allow list". The three sub-labels under the "Layer" headings are the smallest text in the frame and therefore where errors hide; render them at the same size as the pink refusal stamps rather than smaller, so they can be proofread.
+
+Before delivering, proofread every label letter by letter against the list above, reading each word backwards as well as forwards. If any label is misspelled, truncated, or duplicated, regenerate rather than deliver the frame.
+
+**Exclusions:** No legend, caption box, title, footnote, colour key, or any explanatory text block. No logos, brand marks, icons of real products, or watermarks. No dog, leash, collar, padlock, or shield icons. Only the nodes, bars, arrows, and labels listed above appear in the frame.

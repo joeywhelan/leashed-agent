@@ -1,0 +1,18 @@
+# Section 2 — Load the Catalog
+
+A dark-themed technical diagram (900×300px, 3:1 ratio, delivered as PNG) illustrating that a checked-in data file with planted defects is bulk-loaded into a freshly created index, and that the defects go in with it: one data file on the left, the bulk-ingest helper in the middle, one index on the right, and small marks showing the defects riding along. Dark charcoal background (#0D1117), flat vector rendering, no 3D effects, at least 5% clear margin on every edge. Colours: Elastic teal (#00BFB3) for Elastic components (the helper, the index), light blue (#1BA9F5) for the flow arrows and the mapping, desaturated slate grey for the data file, yellow (#FEC514) only for the defect marks. Labels in a clean monospaced face, grey unless noted.
+
+**Key components (left to right):**
+
+- **Left: the data file** — a grey document icon, tall, labelled above "assets/data/products.ndjson" and below "5,040 lines". Along its face, a column of thin grey horizontal lines suggests rows; five of those rows carry a small yellow dot at their right edge, evenly spaced down the face, marking the planted defects. No text on the rows.
+- **Left-centre: the mapping** — a small light-blue document icon above the flow line, labelled "assets/config/mapping.json", with a thin light-blue arrow down to the index labelled "indices create".
+- **Centre: the helper** — a teal rounded rectangle labelled "helpers bulk-ingest", with a light-blue arrow entering from the data file labelled "--data-file" and a light-blue arrow leaving toward the index labelled "5,040 succeeded / 0 failed".
+- **Right: the index** — a teal cylinder labelled "products" with "5,040 documents" beneath. Inside the cylinder, the same five yellow dots reappear, scattered, showing that the defects are now in the index. Beneath the cylinder, in grey, the field list on one line: "sku · category · price · name".
+
+**Design principle:**
+The image communicates a single idea: "the catalog is loaded exactly as it is, defects included, and nothing in the load step knows or cares that they are there." The yellow dots must be the same size and count on the file and in the index.
+
+**Text accuracy:**
+Every string must be copied character-for-character; the only permitted strings in the frame are: `assets/data/products.ndjson`, `5,040 lines`, `assets/config/mapping.json`, `indices create`, `helpers bulk-ingest`, `--data-file`, `5,040 succeeded / 0 failed`, `products`, `5,040 documents`, `sku · category · price · name`. Watch for doubled consonants ("Serrverless"-type errors) and proofread every label letter by letter before delivering; regenerate rather than deliver a misspelled frame.
+
+**Exclusions:** No legend, caption box, title, footnote, colour key, or any explanatory text block. No logos, brand marks, icons of real products, or watermarks. Only the nodes, arrows, and labels listed above appear in the frame.

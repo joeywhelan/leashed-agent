@@ -1,0 +1,5 @@
+{
+  "name": "leashed-agent",
+  "region_id": "aws-us-east-1",
+  "optimized_for": "general_purpose"
+}

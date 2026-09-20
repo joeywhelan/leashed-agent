@@ -1,0 +1,40 @@
+# Least Privilege for AI Agents LinkedIn Cover Design Specification
+
+A stylised LinkedIn cover image — bold, visual, and marketing-oriented. Not an architecture diagram. The composition communicates one idea through one everyday object: a camera-style aperture. Three concentric rings of overlapping leaves form an iris, opened to a precise, modest setting, and a single beam of light passes through the opening onto a small patch of work below, lighting exactly that patch and nothing beyond it. The opening is not shut and it is not wide. It has been set to let through exactly what the work needs.
+
+**Canvas:** 1920 × 1080 px, 16:9, the size LinkedIn specifies for an article cover image (it crops uploads to 16:9, so match it exactly and nothing is lost). Deliver the image as a PNG file, not JPEG, WEBP or GIF. Deep ink background (#0A0F1E) with a subtle radial glow behind the aperture, so the centre of the frame reads as the source of light and the edges as the dark.
+
+**Framing:** The full composition must sit within the frame with at least 10% clear margin on the left and right edges, and 12% on top and bottom. Nothing may touch or cross a border. LinkedIn shows the cover at 16:9 on the article page but at a shorter 1.91:1 ratio in feed previews, and the article title overlays part of the cover on some surfaces. Keep every essential element — the three rings, the opening, the beam and the lit patch — inside that central safe area so the story survives a shallow crop of the top and bottom, and keep the upper 12% free of anything that would fight an overlaid title.
+
+**Core Concept:**
+One object, one opening, one beam. The aperture faces the viewer, tilted slightly so its depth reads, occupying the upper-centre of the safe area. Its opening is set small: clearly open, clearly not wide, perhaps a fifth of the aperture's full diameter. Through that opening a beam of warm light falls downward and forward onto the ground plane below, where it lights a compact scatter of flat rectangles, records lying on a surface. The beam's footprint matches the scatter almost exactly; the ground just beyond the last record is already dark. The eye should go rings, opening, beam, lit records, and understand without reading anything that the opening was set to light this work and no more, and that the rings are what set it.
+
+**The Aperture (upper centre, the largest element):**
+A precision mechanism, clean and machined, with no lettering, dials, or markings. It is built from three concentric rings, each a ring of overlapping curved leaves like a camera iris. The rings are distinct from one another, separated by a thin dark gap, so that three can be counted at a glance from the outside in. The outermost ring is the widest and dimmest, lit in cool light blue; the middle ring is narrower and shades toward teal; the innermost ring is the narrowest and brightest of the three, in teal, and its leaves define the actual opening. All three rings close toward the same centre. Nothing else — no lens glass, no barrel, no camera body. The rings float in dark space.
+
+**The Opening and the Beam (the hero):**
+The opening at the centre of the innermost ring is small and crisp-edged, and it is the brightest point in the frame: pure warm yellow light. From it, a single beam of the same yellow falls down and toward the viewer, widening only slightly, rendered as visible light in dark air, soft-edged and luminous. The beam is the only warm element in the frame and the eye's path from the mechanism to the work. It must be clearly narrower than the aperture itself; the point is that most of the mechanism is closed and the beam is what the small opening lets through.
+
+**The Lit Patch (lower centre):**
+On a dark ground plane below the aperture, a compact scatter of small flat rectangles, records or documents seen from above, lies where the beam lands. The rectangles inside the beam are lit warm yellow and read clearly as shapes. The beam's edge falls at the edge of the scatter: the outermost rectangles are half-lit, and the ground immediately beyond them is dark. Nothing lies outside the beam. Render the rectangles as blank shapes, with no marks on them.
+
+**Connecting Elements:**
+- The beam is the only connector in the frame. No arrows, no arrowheads, no boxes, no borders around elements
+- Optionally, a few tiny motes of yellow light drifting in the beam, to give it presence in the air. Keep them sparse
+- No hands, no figures, no camera, no tripod, no desk edge, no other objects. The aperture, the beam and the lit patch float in dark space
+
+**Text:**
+None. **No title, no headline, no labels, no annotations, no captions, no numbers, no letters or glyphs of any kind anywhere in the frame.** The rectangles in the lit patch must not show readable text or even pseudo-text — plain shapes only. No aperture scale, f-numbers, tick marks or engraving on the rings. The metaphor carries the entire message.
+
+**Brand Reference — palette, not logo:**
+**No logo anywhere in the frame.** Do not place the Elastic brandmark, the "elastic" wordmark, any lockup, or any other company mark, badge, or watermark. The brand is expressed entirely through colour.
+
+The colour scheme is a cool dark field with one warm accent, drawn from the Elastic palette:
+- Background: deep ink #0A0F1E
+- The three rings: light blue #1BA9F5 on the outermost, shading through to teal #00BFB3 on the innermost, with their unlit faces falling to desaturated slate grey
+- The gaps between rings and the ground plane: near-black, deliberately outside the palette, so the rings read as light against them
+- The opening, the beam, the motes and the lit rectangles: yellow #FEC514, the only warm colour in the frame, used for nothing else
+- No pink and no green anywhere; keep the palette to blue, teal, grey and one yellow
+
+**Mood:**
+Cinematic dark tech with a touch of precision instrument. Think product launch graphic, not whiteboard diagram and not a stock photo of a camera lens. Clean, confident, with depth and luminosity. The emotional read is *exactly enough*: three rings set a small, deliberate opening, and the light that comes through is precisely the light the work needs.

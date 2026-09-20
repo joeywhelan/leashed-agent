@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Least Privilege for AI Agents, with the Elastic CLI</title>
+<style>
+  :root {
+    --bg: #0D1117;
+    --panel: #121A24;
+    --line: #1F2A37;
+    --text: #E6EDF3;
+    --muted: #9AA7B4;
+    --teal: #00BFB3;
+    --blue: #1BA9F5;
+    --yellow: #FEC514;
+    --pink: #F04E98;
+    --orange: #F5A700;
+    --purple: #8C5BFF;
+    --font: "Inter", "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    --mono: "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
+  }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); overflow: hidden; }
+
+  /* Fixed 1600x900 stage scaled to fit the window: layout is deterministic. */
+  #stage { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; transform-origin: 0 0; }
+  .slide { position: absolute; inset: 0; padding: 52px 80px 110px 80px; box-sizing: border-box; display: none; flex-direction: column; }
+  .slide.active { display: flex; }
+
+  .kicker { color: var(--teal); font-size: 20px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; margin: 0 0 10px; }
+  h1 { font-size: 40px; line-height: 1.12; margin: 0 0 18px; font-weight: 700; }
+  h1 .accent { color: var(--teal); }
+  h2 { font-size: 24px; margin: 0 0 8px; font-weight: 600; }
+  p, li { font-size: 21px; line-height: 1.38; }
+  ul { margin: 0; padding-left: 28px; }
+  li { margin: 0 0 8px; }
+  li b { color: var(--text); }
+  .muted { color: var(--muted); }
+  .teal { color: var(--teal); } .blue { color: var(--blue); } .yellow { color: var(--yellow); } .pink { color: var(--pink); }
+  .orange { color: var(--orange); } .purple { color: var(--purple); }
+  code { font-family: var(--mono); font-size: 0.9em; color: var(--blue); white-space: nowrap; }
+
+  .row { display: flex; gap: 40px; flex: 1; min-height: 0; }
+  .col { flex: 1; min-width: 0; }
+  .figure { display: block; width: 100%; height: auto; border-radius: 10px; }
+  .figure.wide { width: 1000px; margin: 0 auto 18px; }
+
+  table.grid { border-collapse: collapse; width: 100%; font-size: 19px; }
+  table.grid th, table.grid td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.grid th { color: var(--muted); font-weight: 500; font-size: 17px; letter-spacing: .04em; text-transform: uppercase; }
+  table.grid td code { font-size: 17px; }
+
+  .stats { display: flex; gap: 24px; margin-top: 8px; }
+  .stat { flex: 1; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 22px; }
+  .stat .n { font-size: 40px; font-weight: 700; line-height: 1; }
+  .stat .l { color: var(--muted); font-size: 18px; margin-top: 6px; }
+
+  pre { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin: 0; font-family: var(--mono); font-size: 16px; line-height: 1.32; color: var(--text); overflow: hidden; white-space: pre; }
+  pre .k { color: var(--blue); } pre .v { color: var(--yellow); } pre .c { color: var(--muted); } pre .hl { color: var(--teal); font-weight: 700; } pre .bad { color: var(--pink); }
+
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 22px; }
+  .card h2 { margin-bottom: 8px; }
+  .card ul { padding-left: 24px; }
+  .card li { font-size: 20px; margin-bottom: 5px; }
+
+  .quote { background: var(--panel); border-left: 4px solid var(--purple); border-radius: 0 12px 12px 0; padding: 14px 20px; font-size: 19px; line-height: 1.4; color: var(--text); }
+  .quote .who { display: block; color: var(--muted); font-size: 17px; margin-top: 8px; }
+
+  /* Title slide */
+  #s1 { padding: 0; }
+  #s1 .cover { position: absolute; inset: 0; background: url("assets/images/cover.png") center / cover no-repeat; }
+  #s1 .shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(13,17,23,.94) 0%, rgba(13,17,23,.80) 45%, rgba(13,17,23,.20) 100%); }
+  #s1 .titlebox { position: absolute; left: 90px; top: 190px; width: 900px; }
+  #s1 h1 { font-size: 64px; margin-bottom: 24px; }
+  #s1 .sub { font-size: 28px; color: var(--text); line-height: 1.35; margin-bottom: 40px; }
+  #s1 .who { font-size: 22px; color: var(--muted); }
+
+  /* Chrome: brand, progress, controls. Content area ends at 790px; chrome lives below 810px. */
+  .brand { position: absolute; left: 80px; bottom: 40px; display: flex; align-items: center; gap: 12px; font-size: 20px; color: var(--muted); }
+  .brand .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 12px var(--teal); }
+  .brand b { color: var(--text); font-weight: 700; }
+  .controls { position: absolute; right: 80px; bottom: 30px; display: flex; align-items: center; gap: 14px; }
+  .controls button { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 10px; width: 52px; height: 44px; font-size: 22px; cursor: pointer; }
+  .controls button:hover { border-color: var(--teal); color: var(--teal); }
+  .controls .count { font-family: var(--mono); font-size: 20px; color: var(--muted); min-width: 80px; text-align: center; }
+  .progress { position: absolute; left: 0; bottom: 0; height: 5px; background: var(--teal); width: 0; transition: width .25s; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 1. Title -->
+  <section class="slide" id="s1">
+    <div class="cover"></div><div class="shade"></div>
+    <div class="titlebox">
+      <p class="kicker">Elastic CLI · Elastic Cloud Serverless · Claude Code</p>
+      <h1>Least Privilege for AI Agents, <span class="accent">with the Elastic CLI</span></h1>
+      <p class="sub">Three permission layers give an AI agent exactly the Elasticsearch access its task needs, and the Elastic CLI is where you set them.</p>
+      <p class="who">A live demo: a human and an agent share one CLI against one Serverless project</p>
+    </div>
+  </section>
+
+  <!-- 2. Why -->
+  <section class="slide" id="s2">
+    <p class="kicker">The question</p>
+    <h1>An agent is only useful with real access. How much is the right amount?</h1>
+    <div class="row">
+      <div class="col">
+        <ul>
+          <li><b>Today the answer is usually all or nothing.</b> The agent gets a service account with broad rights, or it gets a chat window and no hands.</li>
+          <li><b>Least privilege is the standing answer for people and services.</b> Grant what the task needs, enforce it where it cannot be argued with, keep the record. Agents should get the same treatment.</li>
+          <li><b>The Elastic CLI is where that happens.</b> One binary for Elasticsearch, Kibana and Cloud, the same for a person and for an agent, with a per-context policy that says which commands may run.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="card">
+          <h2>What you get</h2>
+          <ul>
+            <li><b>One tool for people and agents.</b> Nothing built or maintained separately for automation.</li>
+            <li><b>Access is a policy setting, not a code change.</b> A few lines of <code>commands.allowed</code> on a context.</li>
+            <li><b>Credentials never enter the model.</b> The CLI resolves secrets from its config; the agent never sees a key.</li>
+            <li><b>Every action is a readable record.</b> The agent's work is literal <code>elastic</code> commands.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. The demo -->
+  <section class="slide" id="s3">
+    <p class="kicker">The demo</p>
+    <h1>Two paths to one index: the human's runs straight through, the agent's crosses three gates</h1>
+    <div class="row">
+      <div class="col" style="flex: 1.3">
+        <img class="figure" src="assets/images/arch.png" alt="Architecture: notebook and Claude Code both call the Elastic CLI; the agent's path passes three layers before the products index in Elastic Cloud Serverless">
+      </div>
+      <div class="col">
+        <ul>
+          <li><b>Scenario.</b> A product catalog with planted data-quality defects. The human loads and explores it; the agent is asked to audit it and fix what it can.</li>
+          <li><b>One config file, three contexts.</b> <code>cloud</code> for the Cloud API, <code>admin</code> for the human, <code>agent</code> for the agent. The human types <code>--use-context admin</code>; the agent gets the default.</li>
+          <li><b>Everything is a shell cell.</b> A Bash-kernel notebook runs <code>elastic</code>, <code>claude -p</code> and <code>jq</code>. No SDK, no wrapper code.</li>
+          <li><b>Clean start, clean finish.</b> The project is created in the first section and deleted in the last. Your own CLI config is never touched.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Human: provision and load -->
+  <section class="slide" id="s4">
+    <p class="kicker">The human, part one</p>
+    <h1>Provision a project and load a catalog, all from the CLI</h1>
+    <img class="figure wide" src="assets/images/section1.png" alt="Provisioning: .env feeds a cloud context in out/elasticrc.yml; the project is created and its admin context saved back">
+    <div class="row">
+      <div class="col">
+        <ul>
+          <li><b>One command creates the project</b> and, with <code>--save-as admin</code>, writes its endpoint and credentials into a context. Credentials are redacted in the output by default.</li>
+          <li><b>The config lives in <code>out/</code></b>, selected with <code>ELASTIC_CLI_CONFIG_FILE</code>. Teardown deletes it with everything else.</li>
+          <li><b><code>helpers bulk-ingest</code></b> loads 5,040 documents with batching and retries in about two seconds.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <table class="grid">
+          <tr><th>Planted defect</th><th>Docs</th></tr>
+          <tr><td>Duplicate SKUs (same record twice)</td><td>40</td></tr>
+          <tr><td>Missing <code>price</code></td><td>30</td></tr>
+          <tr><td>Negative <code>price</code></td><td>12</td></tr>
+          <tr><td>Mixed-case <code>category</code></td><td>150</td></tr>
+          <tr><td>Whitespace around <code>name</code></td><td>60</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Human: explore -->
+  <section class="slide" id="s5">
+    <p class="kicker">The human, part two</p>
+    <h1>The defects are visible from the shell to anyone who looks</h1>
+    <img class="figure wide" src="assets/images/section3.png" alt="Three CLI results: a negative minimum price, 30 products with no price, and eighteen category rows where there should be six">
+    <div class="row">
+      <div class="col" style="flex: 1.2">
+<pre>elastic es esql query --use-context admin --format tsv \
+  --query <span class="v">"FROM products
+           | STATS docs = COUNT(*) BY category | SORT docs DESC"</span>
+
+elastic es search --index products --use-context admin --size 0 \
+  --query <span class="v">'{"bool":{"must_not":{"exists":{"field":"price"}}}}'</span> \
+  --output-template <span class="v">"{{ hits.total.value }} products have no price"</span>
+<span class="c">→</span> <span class="hl">30 products have no price</span></pre>
+      </div>
+      <div class="col">
+        <ul>
+          <li><b>ES|QL straight from the shell</b>, with <code>--format tsv</code> for a table you can read.</li>
+          <li><b>Shape the output in the command.</b> <code>--output-fields</code> keeps only the paths you name; <code>--output-template</code> turns one value into a sentence. No <code>jq</code> layer.</li>
+          <li><b>Six categories should come back.</b> Eighteen do. The catalog needs a proper audit, and that is the agent's job.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Three layers -->
+  <section class="slide" id="s6">
+    <p class="kicker">Leash the agent</p>
+    <h1>One delete, refused three times, by three different parties</h1>
+    <img class="figure wide" style="width: 900px; margin-bottom: 12px" src="assets/images/section4.png" alt="The same delete meets three gates: Claude Code tool permission (denied), CLI allowlist (command_blocked), Elastic API key (403)">
+    <table class="grid">
+      <tr><th style="width:12%">Layer</th><th style="width:22%">Enforced by</th><th>What it is</th><th style="width:22%">Refusal</th></tr>
+      <tr><td><b>1</b></td><td>Elasticsearch</td><td>A read-only API key on the <code>agent</code> context: <code>read</code>, <code>view_index_metadata</code>, <code>monitor</code> on <code>products*</code></td><td><span class="pink">403</span> from the server</td></tr>
+      <tr><td><b>2</b></td><td>The <code>elastic</code> binary</td><td><code>commands.allowed</code> on the <code>agent</code> context: reads and ES|QL only. Checked before any request is sent</td><td><span class="pink">command_blocked</span>, exit 1</td></tr>
+      <tr><td><b>3</b></td><td>Claude Code</td><td><code>--allowedTools "Bash(elastic *)"</code> plus deny rules for <code>--use-context</code> and <code>--config-file</code></td><td><span class="pink">denied</span> before the binary runs</td></tr>
+    </table>
+    <p class="muted" style="margin: 10px 0 0; font-size: 19px">Get past one and the next is waiting. The agent only ever meets the first; the notebook proves all three.</p>
+  </section>
+
+  <!-- 7. Policy as config -->
+  <section class="slide" id="s7">
+    <p class="kicker">What the leash looks like</p>
+    <h1>Three small files. Widening the agent from audit to repair is a config edit.</h1>
+    <div class="row">
+      <div class="col">
+        <h2 class="teal">Layer 1 · agent-key.json</h2>
+<pre>{ <span class="k">"name"</span>: <span class="v">"leashed-agent-agent"</span>,
+  <span class="k">"role_descriptors"</span>: { <span class="k">"products_read_only"</span>: {
+    <span class="k">"cluster"</span>: [<span class="v">"monitor"</span>],
+    <span class="k">"indices"</span>: [{ <span class="k">"names"</span>: [<span class="v">"products*"</span>],
+      <span class="k">"privileges"</span>: [<span class="v">"read"</span>, <span class="v">"view_index_metadata"</span>,
+                     <span class="v">"monitor"</span>] }] } } }</pre>
+        <h2 class="teal" style="margin-top: 18px">Layer 3 · the claude command line</h2>
+<pre>claude -p <span class="v">"$(cat assets/prompts/audit.md)"</span> \
+  --tools Bash --allowedTools <span class="v">"Bash(elastic *)"</span> \
+  --disallowedTools <span class="v">"Bash(elastic * --use-context *)"</span> \
+                    <span class="v">"Bash(elastic * --config-file *)"</span> \
+  --model claude-sonnet-5 --max-turns 30</pre>
+      </div>
+      <div class="col">
+        <h2 class="teal">Layer 2 · agent-policy.yml</h2>
+<pre><span class="k">allowed</span>:
+  - version
+  - status
+  - stack.es.info
+  - stack.es.count
+  - stack.es.search
+  - stack.es.esql.*
+  - stack.es.indices.get-mapping
+  - stack.es.indices.get-settings
+  - stack.es.helpers.scroll-search
+  <span class="c"># ... 15 more reads; nothing that writes</span></pre>
+        <ul style="margin-top: 16px">
+          <li>Attached to the context with one <code>yq</code> line; a context's list <b>replaces</b> the root list.</li>
+          <li>To let the agent apply fixes itself, add <code>stack.es.update-by-query</code> and re-mint the key with <code>write</code>. Nothing else changes.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. The agent run -->
+  <section class="slide" id="s8">
+    <p class="kicker">The agent</p>
+    <h1>Asked to fix what it can, it finds everything, hits the wall once, and hands back commands</h1>
+    <div class="row">
+      <div class="col" style="flex: 1.1">
+        <ul>
+          <li><b>The task</b> is plain language: audit <code>products</code>, fix what can be fixed mechanically, report. It is not told its context is read-only.</li>
+          <li><b>It finds all five defect classes</b> with ES|QL, with counts that match the plant exactly, and three examples each.</li>
+          <li><b>It checks <code>--help</code>, then tries <code>update-by-query</code>.</b> The CLI answers <code>command_blocked</code>. It does not retry or look for another route.</li>
+          <li><b>The report is the deliverable:</b> what it changed (nothing), proposed commands for the operator, and what needs a human decision and why.</li>
+        </ul>
+        <div class="stats" style="margin-top: 14px">
+          <div class="stat"><div class="n">23</div><div class="l">turns</div></div>
+          <div class="stat"><div class="n">163<span class="muted" style="font-size:24px">s</span></div><div class="l">wall clock</div></div>
+          <div class="stat"><div class="n">$0.63</div><div class="l">model cost</div></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="quote">"I identified safe, deterministic mechanical fixes for two of them and constructed a verified <code>update-by-query</code> command to apply both … but the command was refused by CLI policy (<code>command_blocked</code>) before it reached Elasticsearch, so <b>no data was changed</b>. Duplicate documents and price defects require a human decision and were not attempted."
+          <span class="who">From the agent's report, out/report.md</span></div>
+        <div class="card" style="margin-top: 18px">
+          <h2>What the transcript shows</h2>
+          <ul>
+            <li>Every command it ran, in order: reads, ES|QL, <code>--help</code>, one write attempt.</li>
+            <li>The <code>command_blocked</code> tool result, exit code 1.</li>
+            <li><b class="teal">Zero</b> occurrences of any of the three credentials.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Human applies -->
+  <section class="slide" id="s9">
+    <p class="kicker">The human, part three</p>
+    <h1>Check the receipts, turn the keys, two defect classes go to zero</h1>
+    <img class="figure wide" src="assets/images/section5.png" alt="Report and transcript come in; two receipts checked; two update-by-query fixes as admin; counts 150 to 0 and 60 to 0">
+    <div class="row">
+      <div class="col">
+        <ul>
+          <li><b>Two receipts before acting</b>, pulled from the transcript with <code>jq</code>: the wall the agent hit, and zero credential strings anywhere in the record.</li>
+          <li><b>Two <code>update-by-query</code> calls with <code>--use-context admin</code></b>, the one thing the agent could not do: lowercase every category, trim every name.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <ul>
+          <li><b>150 → 0 and 60 → 0.</b> The category breakdown is back to six rows.</li>
+          <li><b>Three classes are left on purpose.</b> Duplicates need a keep-or-drop decision per pair; missing and negative prices have no source of truth in the index. That is a data owner's call, not an agent's.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Takeaways -->
+  <section class="slide" id="s10">
+    <p class="kicker">Takeaways</p>
+    <h1>Size the agent's access to the job, and put the policy where the agent cannot argue with it</h1>
+    <div class="stats">
+      <div class="stat"><div class="n"><span class="teal">1</span> binary</div><div class="l">for people and agents alike</div></div>
+      <div class="stat"><div class="n"><span class="teal">3</span> layers</div><div class="l">three enforcers, one delete refused three ways</div></div>
+      <div class="stat"><div class="n"><span class="teal">0</span> secrets</div><div class="l">in the agent's transcript</div></div>
+      <div class="stat"><div class="n"><span class="teal">2</span> lines</div><div class="l">to widen the agent from audit to repair</div></div>
+    </div>
+    <div class="row" style="margin-top: 26px">
+      <div class="col">
+        <ul>
+          <li><b>Read-only was this demo's setting, not the point.</b> The allowlist is a dial. Many teams will want the agent to apply the mechanical fixes itself, and that is a policy edit reviewed like any other change.</li>
+          <li><b>The agent reasons; the human decides.</b> It found every defect and wrote the exact commands. The judgment calls stayed with the person holding the keys.</li>
+          <li><b>Agents read <code>CLAUDE.md</code>.</b> Ground rules such as "confirm flags with <code>--help</code>" and "a refusal is final" shaped a report the operator could run as-is.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="card">
+          <h2>Try it</h2>
+          <ul>
+            <li>Notebook, configs, prompts and article: <span class="teal">github.com/joeywhelan/leashed-agent</span></li>
+            <li>Runs against any Elastic Cloud Serverless project. Bring a Cloud API key and Claude Code; the notebook creates and deletes everything else.</li>
+            <li>Swap in your own index and your own task. The three files on the previous slide are the whole leash.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="brand"><span class="dot"></span><span><b>Elastic</b> · Search AI</span></div>
+  <div class="controls">
+    <button id="prev" aria-label="Previous slide">&#8592;</button>
+    <span class="count" id="count">1 / 10</span>
+    <button id="next" aria-label="Next slide">&#8594;</button>
+  </div>
+  <div class="progress" id="progress"></div>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const stage = document.getElementById('stage');
+  let i = Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1), 10) || 1) - 1));
+
+  function fit() {
+    const s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+    stage.style.transformOrigin = '50% 50%';
+  }
+  function show(n) {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((el, k) => el.classList.toggle('active', k === i));
+    document.getElementById('count').textContent = `${i + 1} / ${slides.length}`;
+    document.getElementById('progress').style.width = `${((i + 1) / slides.length) * 100}%`;
+    history.replaceState(null, '', `#${i + 1}`);
+  }
+  document.getElementById('prev').onclick = () => show(i - 1);
+  document.getElementById('next').onclick = () => show(i + 1);
+  window.addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+  });
+  window.addEventListener('resize', fit);
+  window.addEventListener('hashchange', () => show((parseInt(location.hash.slice(1), 10) || 1) - 1));
+  fit(); show(i);
+
+  // Layout check (used during authoring): ?check reports any slide whose content
+  // extends below the reserved chrome band (y > 790 in stage coordinates) or off the right edge.
+  if (location.search.includes('check')) {
+    window.addEventListener('load', () => {
+      const bad = [];
+      slides.forEach((el, k) => {
+        if (k === 0) return;
+        el.classList.add('active');
+        el.querySelectorAll('*').forEach(node => {
+          const r = node.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+          const scale = sr.width / 1600;
+          const bottom = (r.bottom - sr.top) / scale, right = (r.right - sr.left) / scale;
+          if (node.offsetParent && (bottom > 792 || right > 1600)) bad.push(`${k + 1}:${node.tagName}:${Math.round(bottom)}`);
+          if (node.offsetParent && node.scrollWidth > node.clientWidth + 1) bad.push(`${k + 1}:${node.tagName}:wide`);
+        });
+        el.classList.toggle('active', k === i);
+      });
+      document.title = bad.length ? 'OVERFLOW ' + bad.join(' ') : 'OK';
+    });
+  }
+</script>
+</body>
+</html>

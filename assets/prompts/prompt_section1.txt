@@ -1,0 +1,18 @@
+# Section 1 — Provisioning
+
+A dark-themed technical diagram (900×300px, 3:1 ratio, delivered as PNG) illustrating that one config file, written by the CLI, accumulates the contexts the human will use: a secret comes in from a file, becomes a context, that context creates a Serverless project, and the project's credentials become a second context in the same file. Dark charcoal background (#0D1117), flat vector rendering, no 3D effects, at least 5% clear margin on every edge. Colours: Elastic teal (#00BFB3) for Elastic components (the CLI config file, the Serverless project), light blue (#1BA9F5) for the flow arrows, orange (#F5A700) for the human's notebook, desaturated slate grey for the `.env` file, yellow (#FEC514) only for the two context names inside the config file. Labels in a clean monospaced face, grey unless noted.
+
+**Key components (left to right):**
+
+- **Far left: notebook** — a small orange rounded rectangle labelled "demo.ipynb", with a thin orange line running under the whole diagram to the config file, labelled "ELASTIC_CLI_CONFIG_FILE", showing that the notebook told the CLI where the file lives.
+- **Left: secret file** — a small grey document icon labelled ".env", with one light-blue arrow to the config file labelled "EC_API_KEY".
+- **Centre: the config file** — a teal rounded rectangle, the largest element, labelled at its top "out/elasticrc.yml". Inside it, stacked, two yellow context names: "cloud" and below it "admin". The "admin" entry is drawn slightly dimmer than "cloud", as if it arrived a moment later.
+- **Right: Serverless project** — a teal dashed rounded rectangle labelled "Elastic Cloud Serverless" with "aws-us-east-1" beneath. Two light-blue arrows connect it to the config file: one from the config file's "cloud" entry to the project labelled "projects create --wait", and one returning from the project to the config file's "admin" entry labelled "--save-as admin".
+
+**Design principle:**
+The image communicates a single idea: "the CLI writes every credential the demo needs into one file it controls, and the human's home directory is never touched." The two arrows between config file and project must read as a round trip: out with the cloud key, back with the project's credentials.
+
+**Text accuracy:**
+Every string must be copied character-for-character; the only permitted strings in the frame are: `demo.ipynb`, `ELASTIC_CLI_CONFIG_FILE`, `.env`, `EC_API_KEY`, `out/elasticrc.yml`, `cloud`, `admin`, `Elastic Cloud Serverless`, `aws-us-east-1`, `projects create --wait`, `--save-as admin`. Watch for doubled consonants ("Serrverless"-type errors) and proofread every label letter by letter before delivering; regenerate rather than deliver a misspelled frame.
+
+**Exclusions:** No legend, caption box, title, footnote, colour key, or any explanatory text block. No logos, brand marks, icons of real products, or watermarks. Only the nodes, arrows, and labels listed above appear in the frame.
